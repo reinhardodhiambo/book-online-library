@@ -1,0 +1,15 @@
+@defer (on timer(3s); prefetch on idle) {
+  <div class="h-56 grid grid-cols-3 gap-4 content-stretch">
+    @for (book of books; track book) {
+      <div>{{ book.title }}</div>
+    }
+  </div>
+} @placeholder {
+  <img alt="loading image" src="/assets/loading.gif"/>
+} @loading {
+  <img alt="loading image" src="/assets/loading.gif"/>
+} @error {
+  <p>An loading error occurred</p>
+}
+
+

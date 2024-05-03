@@ -3,6 +3,6 @@ export interface BookParam {
   fields?: string;
   sort?: string;
   offset?: string;
-  page?: number;
-  limit?: number;
+  page?: string;
+  limit?: string;
 }
