@@ -7,7 +7,8 @@ import {RouterOutlet} from "@angular/router";
   selector: 'app-books',
   standalone: true,
   imports: [
-    RouterOutlet
+    RouterOutlet,
+    BookComponent
   ],
   templateUrl: './books.component.html',
   styleUrl: './books.component.sass'
@@ -15,5 +16,7 @@ import {RouterOutlet} from "@angular/router";
 export class BooksComponent {
   @ViewChild(BookComponent, {static: true}) bookComponent: BookComponent | undefined;
   @Input() books:Doc[] = [];
+  @Input() page:string = 'landing'
+  @Input() loading: boolean = false;
 
 }

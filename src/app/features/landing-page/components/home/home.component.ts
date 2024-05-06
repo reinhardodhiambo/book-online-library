@@ -17,6 +17,7 @@ import {Doc} from "@shared/models/doc";
 export class HomeComponent implements OnInit {
 
   books!: Doc[];
+  loading: boolean = false;
 
   constructor(private homeService: HomeService) {
   }
@@ -26,21 +27,26 @@ export class HomeComponent implements OnInit {
   }
 
   getBooks() {
+    this.loading = true;
     let data: BookParam = {
       q: "finance",
-      limit: "9"
+      limit: "9",
+      fields: "oclc,first_publish_year,title,author_name,isbn"
     };
     const sub = this.homeService
       .getBooks(data)
       .subscribe({
         next: (res: BookSearchResponse) => {
           this.books = res.docs || [];
+          this.loading = false;
         },
         error: (err) => {
           console.log(err);
+          this.loading = false;
         },
         complete: () => {
           sub.unsubscribe();
+          this.loading = false;
         },
       })
   }
