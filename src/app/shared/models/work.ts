@@ -19,6 +19,7 @@ export class Work {
   public_scan?: boolean;
   has_fulltext?: boolean;
   availability?: Availability;
+  cover?: any;
 
   constructor(data: any) {
     this.key = data.key;
