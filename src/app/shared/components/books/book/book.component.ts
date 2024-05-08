@@ -1,27 +1,42 @@
-import {Component, Input} from '@angular/core';
-import {Doc} from "@shared/models/doc";
-import {AsyncPipe} from "@angular/common";
+import {Component, Input, OnChanges, OnInit, SimpleChanges} from '@angular/core';
+import {Work} from "@shared/models/work";
+import {Router} from "@angular/router";
 
 @Component({
   selector: 'app-book',
   standalone: true,
-  imports: [
-    AsyncPipe
-  ],
   templateUrl: './book.component.html',
   styleUrl: './book.component.sass'
 })
-export class BookComponent {
-  @Input() book: Doc = {};
-  placeholder = 'https://placehold.co/400x600';
+export class BookComponent implements OnInit, OnChanges {
 
-  getCover(code: string[] | undefined) {
-    if (code && code[0]) {
-      return `https://covers.openlibrary.org/b/isbn/${code[0]}-M.jpg`;
-    } else {
-      return this.placeholder;
+  @Input() book!: Work;
+  @Input() page: string = 'landing'
+  cover = 'https://placehold.co/400x600';
+
+  constructor( private router: Router) {
+  }
+
+
+  ngOnInit(): void {
+
+  }
+
+  ngOnChanges(changes: SimpleChanges) {
+    if (changes?.['book']) {
+      this.setCover()
     }
 
+  }
+
+  setCover() {
+    if (this.book?.cover_id) {
+      this.cover = `https://covers.openlibrary.org/b/id/${this.book?.cover_id}-M.jpg`;
+    }
+  }
+
+  viewBook() {
+    this.router.navigate([`/book-details${this.book?.key}`]);
   }
 
 

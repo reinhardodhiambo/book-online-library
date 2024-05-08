@@ -1,9 +1,9 @@
 import {Component, OnInit} from '@angular/core';
 import {BooksComponent} from "@shared/components/books/books.component";
 import {HomeService} from "@features/landing-page/services/home/home.service";
-import {BookParam} from "@features/landing-page/interfaces/book-param";
-import {BookSearchResponse} from "@shared/models/book-search-response";
-import {Doc} from "@shared/models/doc";
+import {SubjectParam} from "@features/landing-page/interfaces/subject-param";
+import {Work} from "@shared/models/work";
+import {SubjectSearchResponse} from "@shared/models/subject-search-response";
 
 @Component({
   selector: 'app-home',
@@ -16,8 +16,9 @@ import {Doc} from "@shared/models/doc";
 })
 export class HomeComponent implements OnInit {
 
-  books!: Doc[];
+  books!: Work[];
   loading: boolean = false;
+  subject = "finance"
 
   constructor(private homeService: HomeService) {
   }
@@ -28,16 +29,15 @@ export class HomeComponent implements OnInit {
 
   getBooks() {
     this.loading = true;
-    let data: BookParam = {
-      q: "finance",
-      limit: "9",
-      fields: "oclc,first_publish_year,title,author_name,isbn"
+    let data: SubjectParam = {
+      limit: 9,
+      details:false
     };
     const sub = this.homeService
-      .getBooks(data)
+      .getSubject(data, this.subject)
       .subscribe({
-        next: (res: BookSearchResponse) => {
-          this.books = res.docs || [];
+        next: (res: SubjectSearchResponse) => {
+          this.books = res.works || [];
           this.loading = false;
         },
         error: (err) => {
