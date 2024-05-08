@@ -4,6 +4,7 @@ import {ActivatedRoute} from "@angular/router";
 import {HomeService} from "@features/landing-page/services/home/home.service";
 import {SubjectSearchResponse} from "@shared/models/subject-search-response";
 import {ToasterService} from "@core/services/toaster/toaster.service";
+import {WishlistService} from "@features/wishlist-page/services/wishlist/wishlist.service";
 
 @Component({
   selector: 'app-book-detail',
@@ -18,7 +19,8 @@ export class BookDetailComponent implements OnChanges, OnInit {
   private activatedRoute = inject(ActivatedRoute);
   workId = this.activatedRoute.snapshot.params['id'];
 
-  constructor(private homeService: HomeService, private toasterService:ToasterService) {
+  constructor(private homeService: HomeService, private toasterService: ToasterService,
+              private wishlistService: WishlistService) {
   }
 
 
@@ -82,31 +84,35 @@ export class BookDetailComponent implements OnChanges, OnInit {
       }
     )
   }
+
   addToWishlist() {
-    const payload = {
-      add: [
-        {key: this.book.key},
-      ]
-    }
-    const sub = this.homeService.addBookToWishList(payload).subscribe(
-      {
-        next: (res: any) => {
+    if (confirm("Add item to wishlist?")) {
 
-          this.toasterService.show('success', 'Item added', 'Item was added to wishlist successfully.');
 
-        },
-        error: (err) => {
-          this.toasterService.show('error', 'Error', err.message);
-
-        },
-        complete: () => {
-          sub.unsubscribe();
-
-        },
+      const payload = {
+        "add": [
+          {key: this.book.key},
+        ]
       }
-    )
+      const sub = this.wishlistService.updateSeedList(payload).subscribe(
+        {
+          next: (res: any) => {
 
+            this.toasterService.show('success', 'Item added', 'Item was added to wishlist-page successfully.');
 
+          },
+          error: (err) => {
+            this.toasterService.show('error', 'Error', err.message);
+
+          },
+          complete: () => {
+            sub.unsubscribe();
+
+          },
+        }
+      )
+
+    }
 
   }
 
