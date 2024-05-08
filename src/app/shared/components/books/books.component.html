@@ -1,0 +1,15 @@
+@defer (on timer(5s); when !loading) {
+  <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mx-auto content-stretch">
+    @for (book of books; track book) {
+      <app-book [book]="book" [page]="page"></app-book>
+    } @empty {
+      <div>No items found</div>
+    }
+  </div>
+} @placeholder {
+  <img class="grid place-items-center h-screen" alt="loading image" src="/assets/loading.gif"/>
+} @error {
+  <p>An loading error occurred</p>
+}
+
+
