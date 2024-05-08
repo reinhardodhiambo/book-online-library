@@ -32,4 +32,12 @@ export class HomeService {
   public getBookByISBN(ISBN: string) {
     return this.httpService.makeRequest(`api/books?bibkeys=ISBN:${ISBN}&jscmd=details&format=json`, 'GET');
   }
+
+  public addBookToWishList(seed: any) {
+    return this.httpService.makeRequest(`people/reinhard_odhiambo/lists/OL253888L/seeds`,'POST',seed)
+  }
+  public getWishList() {
+    return this.httpService.makeRequest(`people/reinhard_odhiambo/lists/OL253888L/seeds.json`, 'GET');
+
+  }
 }

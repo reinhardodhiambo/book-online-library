@@ -3,6 +3,7 @@ import {Work} from "@shared/models/work";
 import {ActivatedRoute} from "@angular/router";
 import {HomeService} from "@features/landing-page/services/home/home.service";
 import {SubjectSearchResponse} from "@shared/models/subject-search-response";
+import {ToasterService} from "@core/services/toaster/toaster.service";
 
 @Component({
   selector: 'app-book-detail',
@@ -17,7 +18,7 @@ export class BookDetailComponent implements OnChanges, OnInit {
   private activatedRoute = inject(ActivatedRoute);
   workId = this.activatedRoute.snapshot.params['id'];
 
-  constructor(private homeService: HomeService) {
+  constructor(private homeService: HomeService, private toasterService:ToasterService) {
   }
 
 
@@ -39,6 +40,7 @@ export class BookDetailComponent implements OnChanges, OnInit {
               publish_date: res.entries[0]?.publish_date,
               title: res.entries[0]?.title,
               pages: res.entries[0]?.number_of_pages,
+              key: res.entries[0]?.key,
             }
             if (this.book.isbn) {
               this.getBookByISBN(this.book.isbn)
@@ -79,6 +81,33 @@ export class BookDetailComponent implements OnChanges, OnInit {
         },
       }
     )
+  }
+  addToWishlist() {
+    const payload = {
+      add: [
+        {key: this.book.key},
+      ]
+    }
+    const sub = this.homeService.addBookToWishList(payload).subscribe(
+      {
+        next: (res: any) => {
+
+          this.toasterService.show('success', 'Item added', 'Item was added to wishlist successfully.');
+
+        },
+        error: (err) => {
+          this.toasterService.show('error', 'Error', err.message);
+
+        },
+        complete: () => {
+          sub.unsubscribe();
+
+        },
+      }
+    )
+
+
+
   }
 
 }

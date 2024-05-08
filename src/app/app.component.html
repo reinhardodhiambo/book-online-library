@@ -2,5 +2,8 @@
 <div class="container mx-auto mt-8">
 
   <router-outlet></router-outlet>
+  <app-toaster *ngFor="let toast of toasts; let i=index"
+               [toast]="toast" [i]="i"
+               (remove)="remove($event)"></app-toaster>
 
 </div>
