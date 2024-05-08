@@ -16,7 +16,12 @@
         Authors:
         <span class="font-normal text-gray-600 text-base">
           @for (author of book.authors; track $index) {
-            {{ author.name }} @if ($index !== (book.authors?.length || 0) - 1) {
+            @if(author.key){
+              {{ author.name }}
+            } @else {
+              {{author}}
+            }
+            @if ($index !== (book.authors?.length || 0) - 1) {
               |
             }
           }
